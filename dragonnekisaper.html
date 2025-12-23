@@ -21,6 +21,11 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
+
+            /* Improve font rendering for Cyrillic (reduce blurriness) */
+            -webkit-font-smoothing: antialiased; /* Chrome, Safari */
+            -moz-osx-font-smoothing: grayscale;  /* macOS Firefox */
+            text-rendering: optimizeLegibility;
         }
         
         .container {
