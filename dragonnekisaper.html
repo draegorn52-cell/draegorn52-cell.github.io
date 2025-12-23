@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>РЎР°РїРµСЂ - РљР»Р°СЃСЃРёС‡РµСЃРєР°СЏ РёРіСЂР°</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3e 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1100px;
+            width: 100%;
+            background-color: rgba(10, 10, 30, 0.95);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+        }
+        
+        header {
+            background: linear-gradient(to right, #0a0a2a, #1e1e4a);
+            padding: 25px;
+            text-align: center;
+            border-bottom: 3px solid #00e5ff;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.1), transparent);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        h1 {
+            font-size: 3rem;
+            letter-spacing: 3px;
+            margin-bottom: 5px;
+            color: #fff;
+            text-shadow: 0 0 10px #00e5ff, 0 0 20px #00e5ff, 0 0 30px #00e5ff;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .game-wrapper {
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .difficulty-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .difficulty-btn {
+            padding: 14px 28px;
+            background: linear-gradient(145deg, #1a1a4a, #0f0f2a);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .difficulty-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .difficulty-btn:hover::before {
+            left: 100%;
+        }
+        
+        .difficulty-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .difficulty-btn.active {
+            background: linear-gradient(145deg, #00e5ff, #0077cc);
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.7);
+        }
+        
+        .super-easy { border-left: 5px solid #4CAF50; }
+        .beginner { border-left: 5px solid #8BC34A; }
+        .intermediate { border-left: 5px solid #FFC107; }
+        .expert { border-left: 5px solid #F44336; }
+        
+        .stats-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 25px;
+            gap: 20px;
+        }
+        
+        .game-stats {
+            display: flex;
+            justify-content: space-between;
+            flex: 2;
+            background: linear-gradient(145deg, #151540, #0d0d2a);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 229, 255, 0.1);
+        }
+        
+        .stat-box {
+            text-align: center;
+            padding: 10px;
+            flex: 1;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #00e5ff;
+            text-shadow: 0 0 5px #00e5ff;
+        }
+        
+        .hint-counter {
+            flex: 1;
+            background: linear-gradient(145deg, #151540, #0d0d2a);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 229, 255, 0.1);
+        }
+        
+        .hint-counter .stat-value {
+            color: #FFD700;
+            text-shadow: 0 0 5px #FFD700;
+        }
+        
+        .game-board {
+            display: grid;
+            grid-gap: 3px;
+            background: linear-gradient(145deg, #0d0d2a, #151540);
+            padding: 8px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border: 2px solid rgba(0, 229, 255, 0.2);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .cell {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(145deg, #1a1a4a, #0f0f2a);
+            border-radius: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        
+        .cell::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .cell:hover::before {
+            opacity: 1;
+        }
+        
+        .cell:hover {
+            background: linear-gradient(145deg, #2a2a6a, #1a1a4a);
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
+        }
+        
+        .cell.revealed {
+            background: linear-gradient(145deg, #0a0a2a, #151540);
+            cursor: default;
+            transform: scale(1);
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        .cell.flagged {
+            background: linear-gradient(145deg, #1a1a4a, #0f0f2a);
+            color: #FF5252;
+        }
+        
+        .cell.flagged::after {
+            content: 'рџљ©';
+            font-size: 18px;
+        }
+        
+        .cell.mine {
+            background: linear-gradient(145deg, #d32f2f, #b71c1c);
+        }
+        
+        .cell.mine::after {
+            content: 'рџ’Ј';
+            font-size: 18px;
+        }
+        
+        .cell.mine.revealed {
+            background: linear-gradient(145deg, #d32f2f, #b71c1c);
+            animation: explode 0.5s;
+        }
+        
+        @keyframes explode {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+        
+        .color-1 { color: #2196F3; text-shadow: 0 0 5px #2196F3; }
+        .color-2 { color: #4CAF50; text-shadow: 0 0 5px #4CAF50; }
+        .color-3 { color: #F44336; text-shadow: 0 0 5px #F44336; }
+        .color-4 { color: #9C27B0; text-shadow: 0 0 5px #9C27B0; }
+        .color-5 { color: #FF9800; text-shadow: 0 0 5px #FF9800; }
+        .color-6 { color: #009688; text-shadow: 0 0 5px #009688; }
+        .color-7 { color: #795548; text-shadow: 0 0 5px #795548; }
+        .color-8 { color: #607D8B; text-shadow: 0 0 5px #607D8B; }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .control-btn {
+            padding: 14px 28px;
+            background: linear-gradient(145deg, #1a1a4a, #0f0f2a);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .control-btn:hover {
+            background: linear-gradient(145deg, #2a2a6a, #1a1a4a);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        #hint-btn:hover {
+            background: linear-gradient(145deg, #FFD700, #FF9800);
+        }
+        
+        #new-game:hover {
+            background: linear-gradient(145deg, #00e5ff, #0077cc);
+        }
+        
+        .instructions {
+            background: linear-gradient(145deg, #151540, #0d0d2a);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 25px;
+            max-width: 800px;
+            line-height: 1.6;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 229, 255, 0.1);
+        }
+        
+        .instructions h3 {
+            color: #00e5ff;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            text-shadow: 0 0 5px #00e5ff;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        
+        .game-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: linear-gradient(145deg, #0a0a2a, #1a1a4a);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+            border: 2px solid #00e5ff;
+            max-width: 450px;
+            width: 90%;
+            animation: messageAppear 0.5s forwards;
+        }
+        
+        @keyframes messageAppear {
+            to { transform: translate(-50%, -50%) scale(1); }
+        }
+        
+        .game-message h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #00e5ff;
+            text-shadow: 0 0 10px #00e5ff;
+        }
+        
+        .game-message p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .message-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 25px;
+        }
+        
+        .message-stat {
+            text-align: center;
+        }
+        
+        .message-stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #00e5ff;
+        }
+        
+        .close-message {
+            padding: 14px 35px;
+            background: linear-gradient(145deg, #00e5ff, #0077cc);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .close-message:hover {
+            background: linear-gradient(145deg, #00bcd4, #006699);
+            transform: scale(1.05);
+        }
+        
+        .hint-message {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: linear-gradient(145deg, #FFD700, #FF9800);
+            color: #333;
+            padding: 15px 25px;
+            border-radius: 10px;
+            z-index: 999;
+            display: none;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            animation: hintSlideUp 0.5s forwards;
+        }
+        
+        @keyframes hintSlideUp {
+            to { transform: translateX(-50%) translateY(0); }
+        }
+        
+        .hint-message i {
+            margin-right: 10px;
+            font-size: 1.3rem;
+        }
+        
+        .win-counter {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(145deg, #151540, #0d0d2a);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            z-index: 10;
+        }
+        
+        .win-counter h4 {
+            color: #00e5ff;
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+        
+        .win-counter p {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            color: #FFD700;
+        }
+        
+        @media (max-width: 900px) {
+            .stats-container {
+                flex-direction: column;
+            }
+            
+            .difficulty-selector {
+                gap: 10px;
+            }
+            
+            .difficulty-btn {
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .cell {
+                width: 30px;
+                height: 30px;
+                font-size: 0.9rem;
+            }
+            
+            .game-stats {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .stat-value {
+                font-size: 1.8rem;
+            }
+            
+            .controls {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .cell {
+                width: 26px;
+                height: 26px;
+                font-size: 0.8rem;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .difficulty-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .difficulty-btn {
+                width: 100%;
+                max-width: 250px;
+                justify-content: center;
+            }
+            
+            .game-message {
+                padding: 25px;
+            }
+            
+            .game-message h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-bomb"></i> РЎРђРџР•Р  РџР Рћ</h1>
+            <p class="subtitle">РЈР»СѓС‡С€РµРЅРЅР°СЏ РІРµСЂСЃРёСЏ РєР»Р°СЃСЃРёС‡РµСЃРєРѕР№ РёРіСЂС‹ СЃ СЃРёСЃС‚РµРјРѕР№ РґРѕСЃС‚РёР¶РµРЅРёР№</p>
+        </header>
+        
+        <div class="win-counter">
+            <h4>РџРѕР±РµРґ РїРѕРґСЂСЏРґ:</h4>
+            <p id="win-streak">0</p>
+        </div>
+        
+        <div class="game-wrapper">
+            <div class="difficulty-selector">
+                <button class="difficulty-btn super-easy active" data-difficulty="super-easy">
+                    <i class="fas fa-baby"></i> РЎСѓРїРµСЂ-Р»РµРіРєРёР№
+                </button>
+                <button class="difficulty-btn beginner" data-difficulty="beginner">
+                    <i class="fas fa-seedling"></i> РќРѕРІРёС‡РѕРє
+                </button>
+                <button class="difficulty-btn intermediate" data-difficulty="intermediate">
+                    <i class="fas fa-user"></i> Р›СЋР±РёС‚РµР»СЊ
+                </button>
+                <button class="difficulty-btn expert" data-difficulty="expert">
+                    <i class="fas fa-fire"></i> Р­РєСЃРїРµСЂС‚
+                </button>
+            </div>
+            
+            <div class="stats-container">
+                <div class="game-stats">
+                    <div class="stat-box">
+                        <div class="stat-label">РћСЃС‚Р°Р»РѕСЃСЊ РјРёРЅ</div>
+                        <div class="stat-value" id="mines-count">5</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Р’СЂРµРјСЏ</div>
+                        <div class="stat-value" id="timer">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">РҐРѕРґС‹</div>
+                        <div class="stat-value" id="moves">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">РћС‚РєСЂС‹С‚Рѕ РјРёРЅ</div>
+                        <div class="stat-value" id="mines-opened">0</div>
+                    </div>
+                </div>
+                
+                <div class="hint-counter">
+                    <div class="stat-label">РџРѕРґСЃРєР°Р·РєРё</div>
+                    <div class="stat-value" id="hints-count">3</div>
+                </div>
+            </div>
+            
+            <div class="game-board" id="game-board">
+                <!-- РРіСЂРѕРІРѕРµ РїРѕР»Рµ Р±СѓРґРµС‚ СЃРіРµРЅРµСЂРёСЂРѕРІР°РЅРѕ Р·РґРµСЃСЊ -->
+            </div>
+            
+            <div class="controls">
+                <button class="control-btn" id="new-game">
+                    <i class="fas fa-redo"></i> РќРѕРІР°СЏ РёРіСЂР°
+                </button>
+                <button class="control-btn" id="hint-btn">
+                    <i class="fas fa-lightbulb"></i> РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РїРѕРґСЃРєР°Р·РєСѓ
+                </button>
+                <button class="control-btn" id="change-mode">
+                    <i class="fas fa-flag"></i> Р РµР¶РёРј: Р¤Р»Р°Р¶РѕРє
+                </button>
+            </div>
+            
+            <div class="instructions">
+                <h3>РљР°Рє РёРіСЂР°С‚СЊ:</h3>
+                <ul>
+                    <li><strong>Р›РљРњ</strong> - РѕС‚РєСЂС‹С‚СЊ РєР»РµС‚РєСѓ</li>
+                    <li><strong>РџРљРњ</strong> РёР»Рё <strong>Р¤Р»Р°Р¶РѕРє СЂРµР¶РёРј + Р›РљРњ</strong> - РїРѕСЃС‚Р°РІРёС‚СЊ/СѓР±СЂР°С‚СЊ С„Р»Р°Р¶РѕРє</li>
+                    <li><strong>Р¦РёС„СЂС‹</strong> РїРѕРєР°Р·С‹РІР°СЋС‚ РєРѕР»РёС‡РµСЃС‚РІРѕ РјРёРЅ РІРѕРєСЂСѓРі РєР»РµС‚РєРё</li>
+                    <li><strong>Р¦РµР»СЊ РёРіСЂС‹</strong> - РѕС‚РєСЂС‹С‚СЊ РІСЃРµ РєР»РµС‚РєРё, РЅРµ СЃРѕРґРµСЂР¶Р°С‰РёРµ РјРёРЅ</li>
+                    <li><strong>РџРѕРґСЃРєР°Р·РєРё</strong> РїРѕРґСЃРІРµС‡РёРІР°СЋС‚ Р±РµР·РѕРїР°СЃРЅСѓСЋ РєР»РµС‚РєСѓ РЅР° 2 СЃРµРєСѓРЅРґС‹</li>
+                </ul>
+                <p>Р’С‹Р±РµСЂРёС‚Рµ СѓСЂРѕРІРµРЅСЊ СЃР»РѕР¶РЅРѕСЃС‚Рё Рё РЅР°С‡РЅРёС‚Рµ РёРіСЂСѓ. РЈРґР°С‡Рё!</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="game-message" id="game-message">
+        <h2 id="message-title">РџРѕР±РµРґР°!</h2>
+        <p id="message-text">Р’С‹ СѓСЃРїРµС€РЅРѕ СЂР°Р·РјРёРЅРёСЂРѕРІР°Р»Рё РїРѕР»Рµ!</p>
+        
+        <div class="message-stats">
+            <div class="message-stat">
+                <div>Р’СЂРµРјСЏ</div>
+                <div class="message-stat-value" id="message-time">0</div>
+            </div>
+            <div class="message-stat">
+                <div>РҐРѕРґС‹</div>
+                <div class="message-stat-value" id="message-moves">0</div>
+            </div>
+            <div class="message-stat">
+                <div>РћС‚РєСЂС‹С‚Рѕ РјРёРЅ</div>
+                <div class="message-stat-value" id="message-mines-opened">0</div>
+            </div>
+        </div>
+        
+        <p id="message-streak">РџРѕР±РµРґ РїРѕРґСЂСЏРґ: <span id="streak-count">0</span></p>
+        <button class="close-message" id="close-message">РќРѕРІР°СЏ РёРіСЂР°</button>
+    </div>
+
+    <div class="hint-message" id="hint-message">
+        <i class="fas fa-lightbulb"></i> <span id="hint-text">РџРѕРґСЃРєР°Р·РєР° Р°РєС‚РёРІРёСЂРѕРІР°РЅР°!</span>
+    </div>
+
+    <script>
+        // РљРѕРЅС„РёРіСѓСЂР°С†РёСЏ СѓСЂРѕРІРЅРµР№ СЃР»РѕР¶РЅРѕСЃС‚Рё
+        const difficulties = {
+            'super-easy': {
+                rows: 7,
+                cols: 7,
+                mines: 5,
+                name: "РЎСѓРїРµСЂ-Р»РµРіРєРёР№",
+                hints: 3
+            },
+            'beginner': {
+                rows: 9,
+                cols: 9,
+                mines: 10,
+                name: "РќРѕРІРёС‡РѕРє",
+                hints: 3,
+                uniqueGames: 20  // РџРµСЂРІС‹Рµ 20 РёРіСЂ Р±СѓРґСѓС‚ СѓРЅРёРєР°Р»СЊРЅС‹РјРё
+            },
+            'intermediate': {
+                rows: 16,
+                cols: 16,
+                mines: 40,
+                name: "Р›СЋР±РёС‚РµР»СЊ",
+                hints: 2
+            },
+            'expert': {
+                rows: 16,
+                cols: 30,
+                mines: 99,
+                name: "Р­РєСЃРїРµСЂС‚",
+                hints: 1
+            }
+        };
+
+        // Р“РµРЅРµСЂР°С‚РѕСЂС‹ СѓРЅРёРєР°Р»СЊРЅС‹С… РїРѕР»РµР№ РґР»СЏ РЅРѕРІРёС‡РєР° (РїРµСЂРІС‹Рµ 20 РёРіСЂ)
+        const uniqueGameGenerators = [
+            // РџР°С‚С‚РµСЂРЅ 1: РјРёРЅС‹ РІ СѓРіР»Р°С…
+            (rows, cols, mines, firstRow, firstCol) => {
+                const positions = [];
+                const corners = [
+                    [0, 0], [0, cols-1], [rows-1, 0], [rows-1, cols-1],
+                    [0, Math.floor(cols/2)], [Math.floor(rows/2), 0],
+                    [Math.floor(rows/2), cols-1], [rows-1, Math.floor(cols/2)],
+                    [Math.floor(rows/4), Math.floor(cols/4)],
+                    [Math.floor(rows/4*3), Math.floor(cols/4*3)]
+                ];
+                
+                for (let i = 0; i < Math.min(mines, corners.length); i++) {
+                    positions.push(corners[i]);
+                }
+                return positions;
+            },
+            
+            // РџР°С‚С‚РµСЂРЅ 2: РјРёРЅС‹ РїРѕ РїРµСЂРёРјРµС‚СЂСѓ
+            (rows, cols, mines, firstRow, firstCol) => {
+                const positions = [];
+                const perimeter = [];
+                
+                // Р’РµСЂС…РЅСЏСЏ Рё РЅРёР¶РЅСЏСЏ РіСЂР°РЅРёС†С‹
+                for (let c = 0; c < cols; c += 2) {
+                    perimeter.push([0, c]);
+                    perimeter.push([rows-1, c]);
+                }
+                
+                // Р›РµРІР°СЏ Рё РїСЂР°РІР°СЏ РіСЂР°РЅРёС†С‹
+                for (let r = 1; r < rows-1; r += 2) {
+                    perimeter.push([r, 0]);
+                    perimeter.push([r, cols-1]);
+                }
+                
+                for (let i = 0; i < Math.min(mines, perimeter.length); i++) {
+                    positions.push(perimeter[i]);
+                }
+                return positions;
+            },
+            
+            // РџР°С‚С‚РµСЂРЅ 3: С€Р°С…РјР°С‚РЅС‹Р№ РїРѕСЂСЏРґРѕРє
+            (rows, cols, mines, firstRow, firstCol) => {
+                const positions = [];
+                for (let r = 0; r < rows && positions.length < mines; r++) {
+                    for (let c = (r % 2); c < cols && positions.length < mines; c += 2) {
+                        positions.push([r, c]);
+                    }
+                }
+                return positions;
+            },
+            
+            // РџР°С‚С‚РµСЂРЅ 4: РґРёР°РіРѕРЅР°Р»СЊ
+            (rows, cols, mines, firstRow, firstCol) => {
+                const positions = [];
+                const minDim = Math.min(rows, cols);
+                for (let i = 0; i < Math.min(mines, minDim); i++) {
+                    positions.push([i, i]);
+                }
+                return positions;
+            },
+            
+            // РџР°С‚С‚РµСЂРЅ 5: РєСЂРµСЃС‚
+            (rows, cols, mines, firstRow, firstCol) => {
+                const positions = [];
+                const centerRow = Math.floor(rows/2);
+                const centerCol = Math.floor(cols/2);
+                
+                // Р’РµСЂС‚РёРєР°Р»СЊРЅР°СЏ Р»РёРЅРёСЏ
+                for (let r = Math.max(0, centerRow - Math.floor(mines/2)); 
+                     r <= Math.min(rows-1, centerRow + Math.floor(mines/2)); r++) {
+                    if (positions.length < mines) {
+                        positions.push([r, centerCol]);
+                    }
+                }
+                
+                // Р“РѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅР°СЏ Р»РёРЅРёСЏ
+                for (let c = Math.max(0, centerCol - Math.floor(mines/2)); 
+                     c <= Math.min(cols-1, centerCol + Math.floor(mines/2)); c++) {
+                    if (positions.length < mines && c !== centerCol) {
+                        positions.push([centerRow, c]);
+                    }
+                }
+                return positions;
+            }
+        ];
+
+        // РЎРѕСЃС‚РѕСЏРЅРёРµ РёРіСЂС‹
+        let gameState = {
+            difficulty: 'super-easy',
+            board: [],
+            mines: [],
+            revealed: [],
+            flagged: [],
+            gameOver: false,
+            gameWon: false,
+            firstClick: true,
+            timer: 0,
+            timerInterval: null,
+            moves: 0,
+            flagMode: false,
+            hints: 3,
+            minesOpened: 0,
+            winStreak: 0,
+            gamesPlayed: 0,
+            uniqueGameIndex: 0
+        };
+
+        // DOM СЌР»РµРјРµРЅС‚С‹
+        const gameBoard = document.getElementById('game-board');
+        const minesCount = document.getElementById('mines-count');
+        const timerElement = document.getElementById('timer');
+        const movesElement = document.getElementById('moves');
+        const minesOpenedElement = document.getElementById('mines-opened');
+        const hintsCountElement = document.getElementById('hints-count');
+        const winStreakElement = document.getElementById('win-streak');
+        const difficultyButtons = document.querySelectorAll('.difficulty-btn');
+        const newGameButton = document.getElementById('new-game');
+        const hintButton = document.getElementById('hint-btn');
+        const changeModeButton = document.getElementById('change-mode');
+        const gameMessage = document.getElementById('game-message');
+        const messageTitle = document.getElementById('message-title');
+        const messageText = document.getElementById('message-text');
+        const messageTime = document.getElementById('message-time');
+        const messageMoves = document.getElementById('message-moves');
+        const messageMinesOpened = document.getElementById('message-mines-opened');
+        const streakCountElement = document.getElementById('streak-count');
+        const messageStreak = document.getElementById('message-streak');
+        const closeMessageButton = document.getElementById('close-message');
+        const hintMessage = document.getElementById('hint-message');
+        const hintText = document.getElementById('hint-text');
+
+        // РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РёРіСЂС‹
+        function initGame() {
+            const config = difficulties[gameState.difficulty];
+            
+            // РЎР±СЂРѕСЃ СЃРѕСЃС‚РѕСЏРЅРёСЏ
+            gameState.board = [];
+            gameState.mines = [];
+            gameState.revealed = [];
+            gameState.flagged = [];
+            gameState.gameOver = false;
+            gameState.gameWon = false;
+            gameState.firstClick = true;
+            gameState.moves = 0;
+            gameState.minesOpened = 0;
+            gameState.hints = config.hints;
+            
+            // РћСЃС‚Р°РЅРѕРІРєР° С‚Р°Р№РјРµСЂР°
+            if (gameState.timerInterval) {
+                clearInterval(gameState.timerInterval);
+                gameState.timerInterval = null;
+            }
+            gameState.timer = 0;
+            timerElement.textContent = gameState.timer;
+            movesElement.textContent = gameState.moves;
+            minesOpenedElement.textContent = gameState.minesOpened;
+            hintsCountElement.textContent = gameState.hints;
+            
+            // РћР±РЅРѕРІР»РµРЅРёРµ РєРѕР»РёС‡РµСЃС‚РІР° РјРёРЅ
+            minesCount.textContent = config.mines;
+            
+            // РЎРѕР·РґР°РЅРёРµ РїСѓСЃС‚РѕРіРѕ РїРѕР»СЏ
+            for (let row = 0; row < config.rows; row++) {
+                gameState.board[row] = [];
+                for (let col = 0; col < config.cols; col++) {
+                    gameState.board[row][col] = {
+                        isMine: false,
+                        neighborMines: 0
+                    };
+                }
+            }
+            
+            // РќР°СЃС‚СЂРѕР№РєР° РёРіСЂРѕРІРѕРіРѕ РїРѕР»СЏ РІ DOM
+            setupGameBoard();
+        }
+
+        // РќР°СЃС‚СЂРѕР№РєР° РёРіСЂРѕРІРѕРіРѕ РїРѕР»СЏ РІ DOM
+        function setupGameBoard() {
+            const config = difficulties[gameState.difficulty];
+            
+            // РћС‡РёСЃС‚РєР° РёРіСЂРѕРІРѕРіРѕ РїРѕР»СЏ
+            gameBoard.innerHTML = '';
+            
+            // РќР°СЃС‚СЂРѕР№РєР° СЃС‚РёР»РµР№ РёРіСЂРѕРІРѕРіРѕ РїРѕР»СЏ
+            gameBoard.style.gridTemplateColumns = `repeat(${config.cols}, 1fr)`;
+            gameBoard.style.gridTemplateRows = `repeat(${config.rows}, 1fr)`;
+            
+            // РЎРѕР·РґР°РЅРёРµ РєР»РµС‚РѕРє
+            for (let row = 0; row < config.rows; row++) {
+                for (let col = 0; col < config.cols; col++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    cell.dataset.row = row;
+                    cell.dataset.col = col;
+                    
+                    // РћР±СЂР°Р±РѕС‚С‡РёРєРё СЃРѕР±С‹С‚РёР№
+                    cell.addEventListener('click', () => handleCellClick(row, col));
+                    cell.addEventListener('contextmenu', (e) => {
+                        e.preventDefault();
+                        toggleFlag(row, col);
+                    });
+                    
+                    // РЈР»СѓС‡С€РµРЅРЅРѕРµ СЃРІРµС‡РµРЅРёРµ РїСЂРё РЅР°РІРµРґРµРЅРёРё
+                    cell.addEventListener('mouseenter', () => {
+                        if (gameState.gameOver || gameState.gameWon) return;
+                        
+                        // РЈСЃРёР»РµРЅРЅРѕРµ СЃРІРµС‡РµРЅРёРµ
+                        cell.style.boxShadow = '0 0 20px rgba(0, 229, 255, 0.8)';
+                        
+                        // РЎР»Р°Р±РѕРµ СЃРІРµС‡РµРЅРёРµ СЃРѕСЃРµРґРЅРёС… РєР»РµС‚РѕРє
+                        for (let r = row - 1; r <= row + 1; r++) {
+                            for (let c = col - 1; c <= col + 1; c++) {
+                                if (r >= 0 && r < config.rows && c >= 0 && c < config.cols) {
+                                    const neighbor = document.querySelector(`.cell[data-row="${r}"][data-col="${c}"]`);
+                                    if (neighbor && !neighbor.classList.contains('revealed')) {
+                                        neighbor.style.boxShadow = '0 0 10px rgba(0, 229, 255, 0.4)';
+                                    }
+                                }
+                            }
+                        }
+                    });
+                    
+                    cell.addEventListener('mouseleave', () => {
+                        // РЎР±СЂР°СЃС‹РІР°РµРј СЃРІРµС‡РµРЅРёРµ
+                        cell.style.boxShadow = '';
+                        
+                        // РЎР±СЂР°СЃС‹РІР°РµРј СЃРІРµС‡РµРЅРёРµ СЃРѕСЃРµРґРЅРёС… РєР»РµС‚РѕРє
+                        for (let r = row - 1; r <= row + 1; r++) {
+                            for (let c = col - 1; c <= col + 1; c++) {
+                                if (r >= 0 && r < config.rows && c >= 0 && c < config.cols) {
+                                    const neighbor = document.querySelector(`.cell[data-row="${r}"][data-col="${c}"]`);
+                                    if (neighbor && !neighbor.classList.contains('revealed')) {
+                                        neighbor.style.boxShadow = '';
+                                    }
+                                }
+                            }
+                        }
+                    });
+                    
+                    gameBoard.appendChild(cell);
+                }
+            }
+        }
+
+        // Р Р°Р·РјРµС‰РµРЅРёРµ РјРёРЅ РїРѕСЃР»Рµ РїРµСЂРІРѕРіРѕ РєР»РёРєР°
+        function placeMines(firstRow, firstCol) {
+            const config = difficulties[gameState.difficulty];
+            let minesPlaced = 0;
+            
+            // РћС‡РёС‰Р°РµРј РјР°СЃСЃРёРІ РјРёРЅ
+            gameState.mines = [];
+            
+            // Р”Р»СЏ СѓСЂРѕРІРЅСЏ "РЅРѕРІРёС‡РѕРє" РїРµСЂРІС‹Рµ 20 РёРіСЂ - СѓРЅРёРєР°Р»СЊРЅС‹Рµ
+            if (gameState.difficulty === 'beginner' && gameState.gamesPlayed < 20) {
+                const generatorIndex = gameState.gamesPlayed % uniqueGameGenerators.length;
+                const minePositions = uniqueGameGenerators[generatorIndex](
+                    config.rows, config.cols, config.mines, firstRow, firstCol
+                );
+                
+                for (const [row, col] of minePositions) {
+                    // РќРµ СЃС‚Р°РІРёРј РјРёРЅСѓ РЅР° РїРµСЂРІСѓСЋ РѕС‚РєСЂС‹С‚СѓСЋ РєР»РµС‚РєСѓ Рё СЃРѕСЃРµРґРЅРёРµ РєР»РµС‚РєРё
+                    if (Math.abs(row - firstRow) <= 1 && Math.abs(col - firstCol) <= 1) {
+                        continue;
+                    }
+                    
+                    // РЎС‚Р°РІРёРј РјРёРЅСѓ
+                    gameState.board[row][col].isMine = true;
+                    gameState.mines.push({row, col});
+                    minesPlaced++;
+                }
+                
+                // Р•СЃР»Рё РЅРµ С…РІР°С‚РёР»Рѕ РјРёРЅ РёР· РїР°С‚С‚РµСЂРЅР°, РґРѕР±Р°РІР»СЏРµРј СЃР»СѓС‡Р°Р№РЅС‹Рµ
+                while (minesPlaced < config.mines) {
+                    const row = Math.floor(Math.random() * config.rows);
+                    const col = Math.floor(Math.random() * config.cols);
+                    
+                    // РќРµ СЃС‚Р°РІРёРј РјРёРЅСѓ РЅР° РїРµСЂРІСѓСЋ РѕС‚РєСЂС‹С‚СѓСЋ РєР»РµС‚РєСѓ Рё СЃРѕСЃРµРґРЅРёРµ РєР»РµС‚РєРё
+                    if (Math.abs(row - firstRow) <= 1 && Math.abs(col - firstCol) <= 1) {
+                        continue;
+                    }
+                    
+                    // РќРµ СЃС‚Р°РІРёРј РјРёРЅСѓ, РµСЃР»Рё РѕРЅР° СѓР¶Рµ С‚Р°Рј
+                    if (gameState.board[row][col].isMine) {
+                        continue;
+                    }
+                    
+                    // РЎС‚Р°РІРёРј РјРёРЅСѓ
+                    gameState.board[row][col].isMine = true;
+                    gameState.mines.push({row, col});
+                    minesPlaced++;
+                }
+            } else {
+                // РЎС‚Р°РЅРґР°СЂС‚РЅРѕРµ СЂР°Р·РјРµС‰РµРЅРёРµ РјРёРЅ
+                while (minesPlaced < config.mines) {
+                    const row = Math.floor(Math.random() * config.rows);
+                    const col = Math.floor(Math.random() * config.cols);
+                    
+                    // РќРµ СЃС‚Р°РІРёРј РјРёРЅСѓ РЅР° РїРµСЂРІСѓСЋ РѕС‚РєСЂС‹С‚СѓСЋ РєР»РµС‚РєСѓ Рё СЃРѕСЃРµРґРЅРёРµ РєР»РµС‚РєРё
+                    if (Math.abs(row - firstRow) <= 1 && Math.abs(col - firstCol) <= 1) {
+                        continue;
+                    }
+                    
+                    // РќРµ СЃС‚Р°РІРёРј РјРёРЅСѓ, РµСЃР»Рё РѕРЅР° СѓР¶Рµ С‚Р°Рј
+                    if (gameState.board[row][col].isMine) {
+                        continue;
+                    }
+                    
+                    // РЎС‚Р°РІРёРј РјРёРЅСѓ
+                    gameState.board[row][col].isMine = true;
+                    gameState.mines.push({row, col});
+                    minesPlaced++;
+                }
+            }
+            
+            // РџРѕРґСЃС‡РёС‚С‹РІР°РµРј РєРѕР»РёС‡РµСЃС‚РІРѕ РјРёРЅ РІРѕРєСЂСѓРі РєР°Р¶РґРѕР№ РєР»РµС‚РєРё
+            calculateNeighborMines();
+            
+            // РћР±РЅРѕРІР»СЏРµРј РєРѕР»РёС‡РµСЃС‚РІРѕ РјРёРЅ РЅР° РґРёСЃРїР»РµРµ
+            minesCount.textContent = config.mines;
+        }
+
+        // РџРѕРґСЃС‡РµС‚ РјРёРЅ РІРѕРєСЂСѓРі РєР°Р¶РґРѕР№ РєР»РµС‚РєРё
+        function calculateNeighborMines() {
+            const config = difficulties[gameState.difficulty];
+            
+            for (let row = 0; row < config.rows; row++) {
+                for (let col = 0; col < config.cols; col++) {
+                    // РџСЂРѕРїСѓСЃРєР°РµРј РєР»РµС‚РєРё СЃ РјРёРЅР°РјРё
+                    if (gameState.board[row][col].isMine) continue;
+                    
+                    let count = 0;
+                    
+                    // РџСЂРѕРІРµСЂСЏРµРј РІСЃРµ СЃРѕСЃРµРґРЅРёРµ РєР»РµС‚РєРё
+                    for (let r = row - 1; r <= row + 1; r++) {
+                        for (let c = col - 1; c <= col + 1; c++) {
+                            // РџСЂРѕРІРµСЂСЏРµРј, С‡С‚Рѕ РєР»РµС‚РєР° РІ РїСЂРµРґРµР»Р°С… РїРѕР»СЏ
+                            if (r >= 0 && r < config.rows && c >= 0 && c < config.cols) {
+                                if (gameState.board[r][c].isMine) {
+                                    count++;
+                                }
+                            }
+                        }
+                    }
+                    
+                    gameState.board[row][col].neighborMines = count;
+                }
+            }
+        }
+
+        // РћР±СЂР°Р±РѕС‚РєР° РєР»РёРєР° РїРѕ РєР»РµС‚РєРµ
+        function handleCellClick(row, col) {
+            // Р•СЃР»Рё РёРіСЂР° РѕРєРѕРЅС‡РµРЅР°, РЅРёС‡РµРіРѕ РЅРµ РґРµР»Р°РµРј
+            if (gameState.gameOver || gameState.gameWon) return;
+            
+            // Р•СЃР»Рё РєР»РµС‚РєР° РїРѕРјРµС‡РµРЅР° С„Р»Р°Р¶РєРѕРј Рё РЅРµ РІ СЂРµР¶РёРјРµ С„Р»Р°Р¶РєР°, РЅРёС‡РµРіРѕ РЅРµ РґРµР»Р°РµРј
+            if (gameState.flagged.some(f => f.row === row && f.col === col) && !gameState.flagMode) {
+                return;
+            }
+            
+            // Р•СЃР»Рё СЂРµР¶РёРј С„Р»Р°Р¶РєР° Р°РєС‚РёРІРµРЅ, СЃС‚Р°РІРёРј/СѓР±РёСЂР°РµРј С„Р»Р°Р¶РѕРє
+            if (gameState.flagMode) {
+                toggleFlag(row, col);
+                return;
+            }
+            
+            // РџРµСЂРІС‹Р№ РєР»РёРє - СЂР°Р·РјРµС‰Р°РµРј РјРёРЅС‹
+            if (gameState.firstClick) {
+                placeMines(row, col);
+                gameState.firstClick = false;
+                startTimer();
+                gameState.gamesPlayed++;
+            }
+            
+            // Р•СЃР»Рё РєР»РµС‚РєР° СѓР¶Рµ РѕС‚РєСЂС‹С‚Р°, РЅРёС‡РµРіРѕ РЅРµ РґРµР»Р°РµРј
+            if (gameState.revealed.some(r => r.row === row && r.col === col)) {
+                return;
+            }
+            
+            // РћС‚РєСЂС‹РІР°РµРј РєР»РµС‚РєСѓ
+            revealCell(row, col);
+            
+            // РЈРІРµР»РёС‡РёРІР°РµРј СЃС‡РµС‚С‡РёРє С…РѕРґРѕРІ
+            gameState.moves++;
+            movesElement.textContent = gameState.moves;
+            
+            // РџСЂРѕРІРµСЂСЏРµРј, РЅРµ РїРѕРїР°Р»Рё Р»Рё РјС‹ РЅР° РјРёРЅСѓ
+            if (gameState.board[row][col].isMine) {
+                gameState.minesOpened++;
+                minesOpenedElement.textContent = gameState.minesOpened;
+                gameOver(false);
+                return;
+            }
+            
+            // РџСЂРѕРІРµСЂСЏРµРј, РІС‹РёРіСЂР°Р»Рё Р»Рё РјС‹
+            checkWin();
+        }
+
+        // РћС‚РєСЂС‹С‚РёРµ РєР»РµС‚РєРё
+        function revealCell(row, col) {
+            const config = difficulties[gameState.difficulty];
+            
+            // Р•СЃР»Рё РєР»РµС‚РєР° Р·Р° РїСЂРµРґРµР»Р°РјРё РїРѕР»СЏ РёР»Рё СѓР¶Рµ РѕС‚РєСЂС‹С‚Р°, РЅРёС‡РµРіРѕ РЅРµ РґРµР»Р°РµРј
+            if (row < 0 || row >= config.rows || col < 0 || col >= config.cols) return;
+            if (gameState.revealed.some(r => r.row === row && r.col === col)) return;
+            
+            // Р”РѕР±Р°РІР»СЏРµРј РєР»РµС‚РєСѓ РІ РѕС‚РєСЂС‹С‚С‹Рµ
+            gameState.revealed.push({row, col});
+            
+            // РЈР±РёСЂР°РµРј С„Р»Р°Р¶РѕРє, РµСЃР»Рё РѕРЅ Р±С‹Р»
+            const flagIndex = gameState.flagged.findIndex(f => f.row === row && f.col === col);
+            if (flagIndex !== -1) {
+                gameState.flagged.splice(flagIndex, 1);
+                updateCellDisplay(row, col);
+            }
+            
+            // РћР±РЅРѕРІР»СЏРµРј РѕС‚РѕР±СЂР°Р¶РµРЅРёРµ РєР»РµС‚РєРё
+            updateCellDisplay(row, col);
+            
+            // Р•СЃР»Рё РєР»РµС‚РєР° РїСѓСЃС‚Р°СЏ (Р±РµР· РјРёРЅ РІРѕРєСЂСѓРі), РѕС‚РєСЂС‹РІР°РµРј СЃРѕСЃРµРґРЅРёРµ РєР»РµС‚РєРё
+            if (gameState.board[row][col].neighborMines === 0) {
+                for (let r = row - 1; r <= row + 1; r++) {
+                    for (let c = col - 1; c <= col + 1; c++) {
+                        // РќРµ РѕС‚РєСЂС‹РІР°РµРј С‚РµРєСѓС‰СѓСЋ РєР»РµС‚РєСѓ
+                        if (r === row && c === col) continue;
+                        
+                        // РћС‚РєСЂС‹РІР°РµРј СЃРѕСЃРµРґРЅСЋСЋ РєР»РµС‚РєСѓ
+                        revealCell(r, c);
+                    }
+                }
+            }
+        }
+
+        // РџРµСЂРµРєР»СЋС‡РµРЅРёРµ С„Р»Р°Р¶РєР°
+        function toggleFlag(row, col) {
+            // Р•СЃР»Рё РёРіСЂР° РѕРєРѕРЅС‡РµРЅР°, РЅРёС‡РµРіРѕ РЅРµ РґРµР»Р°РµРј
+            if (gameState.gameOver || gameState.gameWon) return;
+            
+            // Р•СЃР»Рё РєР»РµС‚РєР° СѓР¶Рµ РѕС‚РєСЂС‹С‚Р°, РЅРёС‡РµРіРѕ РЅРµ РґРµР»Р°РµРј
+            if (gameState.revealed.some(r => r.row === row && r.col === col)) return;
+            
+            const config = difficulties[gameState.difficulty];
+            const flagIndex = gameState.flagged.findIndex(f => f.row === row && f.col === col);
+            
+            // Р•СЃР»Рё С„Р»Р°Р¶РѕРє СѓР¶Рµ СѓСЃС‚Р°РЅРѕРІР»РµРЅ, СѓР±РёСЂР°РµРј РµРіРѕ
+            if (flagIndex !== -1) {
+                gameState.flagged.splice(flagIndex, 1);
+                minesCount.textContent = parseInt(minesCount.textContent) + 1;
+            } 
+            // РРЅР°С‡Рµ СЃС‚Р°РІРёРј С„Р»Р°Р¶РѕРє, РµСЃР»Рё РµСЃС‚СЊ РґРѕСЃС‚СѓРїРЅС‹Рµ С„Р»Р°Р¶РєРё
+            else if (gameState.flagged.length < config.mines) {
+                gameState.flagged.push({row, col});
+                minesCount.textContent = parseInt(minesCount.textContent) - 1;
+            }
+            
+            // РћР±РЅРѕРІР»СЏРµРј РѕС‚РѕР±СЂР°Р¶РµРЅРёРµ РєР»РµС‚РєРё
+            updateCellDisplay(row, col);
+            
+            // РџСЂРѕРІРµСЂСЏРµРј, РІС‹РёРіСЂР°Р»Рё Р»Рё РјС‹
+            checkWin();
+        }
+
+        // РћР±РЅРѕРІР»РµРЅРёРµ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ РєР»РµС‚РєРё
+        function updateCellDisplay(row, col) {
+            const cell = document.querySelector(`.cell[data-row="${row}"][data-col="${col}"]`);
+            if (!cell) return;
+            
+            // РћС‡РёС‰Р°РµРј РєР»Р°СЃСЃС‹ РєР»РµС‚РєРё
+            cell.className = 'cell';
+            cell.innerHTML = '';
+            
+            const isRevealed = gameState.revealed.some(r => r.row === row && r.col === col);
+            const isFlagged = gameState.flagged.some(f => f.row === row && f.col === col);
+            const cellData = gameState.board[row][col];
+            
+            if (isRevealed) {
+                cell.classList.add('revealed');
+                
+                if (cellData.isMine) {
+                    cell.classList.add('mine');
+                } else if (cellData.neighborMines > 0) {
+                    cell.textContent = cellData.neighborMines;
+                    cell.classList.add(`color-${cellData.neighborMines}`);
+                }
+            } else if (isFlagged) {
+                cell.classList.add('flagged');
+            }
+        }
+
+        // РџСЂРѕРІРµСЂРєР° РїРѕР±РµРґС‹
+        function checkWin() {
+            const config = difficulties[gameState.difficulty];
+            const totalCells = config.rows * config.cols;
+            
+            // Р’СЃРµ РєР»РµС‚РєРё, РєСЂРѕРјРµ РјРёРЅ, РѕС‚РєСЂС‹С‚С‹
+            const nonMineCells = totalCells - config.mines;
+            
+            if (gameState.revealed.length === nonMineCells) {
+                gameOver(true);
+            }
+        }
+
+        // РљРѕРЅРµС† РёРіСЂС‹
+        function gameOver(isWin) {
+            gameState.gameOver = true;
+            gameState.gameWon = isWin;
+            
+            // РћСЃС‚Р°РЅР°РІР»РёРІР°РµРј С‚Р°Р№РјРµСЂ
+            if (gameState.timerInterval) {
+                clearInterval(gameState.timerInterval);
+                gameState.timerInterval = null;
+            }
+            
+            // РћР±РЅРѕРІР»СЏРµРј СЃС‡РµС‚С‡РёРє РїРѕР±РµРґ
+            if (isWin) {
+                gameState.winStreak++;
+            } else {
+                gameState.winStreak = 0;
+            }
+            
+            winStreakElement.textContent = gameState.winStreak;
+            
+            // РџРѕРєР°Р·С‹РІР°РµРј РІСЃРµ РјРёРЅС‹
+            const config = difficulties[gameState.difficulty];
+            for (let row = 0; row < config.rows; row++) {
+                for (let col = 0; col < config.cols; col++) {
+                    if (gameState.board[row][col].isMine && 
+                        !gameState.flagged.some(f => f.row === row && f.col === col)) {
+                        // РџРѕРєР°Р·С‹РІР°РµРј РјРёРЅСѓ
+                        const cell = document.querySelector(`.cell[data-row="${row}"][data-col="${col}"]`);
+                        if (cell && !cell.classList.contains('revealed')) {
+                            cell.classList.add('revealed', 'mine');
+                        }
+                    }
+                }
+            }
+            
+            // РџРѕРєР°Р·С‹РІР°РµРј СЃРѕРѕР±С‰РµРЅРёРµ Рѕ СЂРµР·СѓР»СЊС‚Р°С‚Рµ РёРіСЂС‹
+            if (isWin) {
+                messageTitle.textContent = "РџРѕР±РµРґР°!";
+                messageText.textContent = "Р’С‹ СѓСЃРїРµС€РЅРѕ СЂР°Р·РјРёРЅРёСЂРѕРІР°Р»Рё РїРѕР»Рµ!";
+                messageStreak.style.display = 'block';
+            } else {
+                messageTitle.textContent = "РРіСЂР° РѕРєРѕРЅС‡РµРЅР°";
+                messageText.textContent = "Р’С‹ РЅР°СЃС‚СѓРїРёР»Рё РЅР° РјРёРЅСѓ!";
+                messageStreak.style.display = 'none';
+            }
+            
+            messageTime.textContent = gameState.timer;
+            messageMoves.textContent = gameState.moves;
+            messageMinesOpened.textContent = gameState.minesOpened;
+            streakCountElement.textContent = gameState.winStreak;
+            
+            // РџРѕРєР°Р·С‹РІР°РµРј СЃРѕРѕР±С‰РµРЅРёРµ СЃ Р·Р°РґРµСЂР¶РєРѕР№
+            setTimeout(() => {
+                gameMessage.style.display = 'block';
+            }, 500);
+        }
+
+        // Р—Р°РїСѓСЃРє С‚Р°Р№РјРµСЂР°
+        function startTimer() {
+            gameState.timer = 0;
+            timerElement.textContent = gameState.timer;
+            
+            gameState.timerInterval = setInterval(() => {
+                gameState.timer++;
+                timerElement.textContent = gameState.timer;
+            }, 1000);
+        }
+
+        // Р¤СѓРЅРєС†РёСЏ РїРѕРґСЃРєР°Р·РєРё
+        function giveHint() {
+            if (gameState.gameOver || gameState.gameWon || gameState.hints <= 0 || gameState.firstClick) return;
+            
+            const config = difficulties[gameState.difficulty];
+            let hintGiven = false;
+            
+            // РС‰РµРј РЅРµРѕС‚РєСЂС‹С‚СѓСЋ РєР»РµС‚РєСѓ Р±РµР· РјРёРЅС‹ Рё С„Р»Р°Р¶РєР°
+            for (let row = 0; row < config.rows && !hintGiven; row++) {
+                for (let col = 0; col < config.cols && !hintGiven; col++) {
+                    const isRevealed = gameState.revealed.some(r => r.row === row && r.col === col);
+                    const isFlagged = gameState.flagged.some(f => f.row === row && f.col === col);
+                    
+                    if (!isRevealed && !isFlagged && !gameState.board[row][col].isMine) {
+                        // РџРѕРґСЃРІРµС‡РёРІР°РµРј РєР»РµС‚РєСѓ
+                        const cell = document.querySelector(`.cell[data-row="${row}"][data-col="${col}"]`);
+                        cell.style.backgroundColor = '#FFD700';
+                        cell.style.color = '#333';
+                        cell.style.boxShadow = '0 0 25px #FFD700';
+                        
+                        // РџРѕРєР°Р·С‹РІР°РµРј СЃРѕРѕР±С‰РµРЅРёРµ Рѕ РїРѕРґСЃРєР°Р·РєРµ
+                        hintText.textContent = `РџРѕРґСЃРєР°Р·РєР°: Р±РµР·РѕРїР°СЃРЅР°СЏ РєР»РµС‚РєР° (${row+1}, ${col+1})`;
+                        hintMessage.style.display = 'block';
+                        
+                        // Р§РµСЂРµР· 3 СЃРµРєСѓРЅРґС‹ СѓР±РёСЂР°РµРј СЃРѕРѕР±С‰РµРЅРёРµ
+                        setTimeout(() => {
+                            hintMessage.style.display = 'none';
+                        }, 3000);
+                        
+                        // Р§РµСЂРµР· 2 СЃРµРєСѓРЅРґС‹ СѓР±РёСЂР°РµРј РїРѕРґСЃРІРµС‚РєСѓ
+                        setTimeout(() => {
+                            if (cell) {
+                                updateCellDisplay(row, col);
+                            }
+                        }, 2000);
+                        
+                        hintGiven = true;
+                        gameState.hints--;
+                        hintsCountElement.textContent = gameState.hints;
+                        
+                        // РћС‚РєР»СЋС‡Р°РµРј РєРЅРѕРїРєСѓ, РµСЃР»Рё РїРѕРґСЃРєР°Р·РѕРє РЅРµ РѕСЃС‚Р°Р»РѕСЃСЊ
+                        if (gameState.hints <= 0) {
+                            hintButton.disabled = true;
+                            hintButton.style.opacity = '0.5';
+                        }
+                    }
+                }
+            }
+            
+            if (!hintGiven) {
+                hintText.textContent = "РќРµ СѓРґР°Р»РѕСЃСЊ РЅР°Р№С‚Рё Р±РµР·РѕРїР°СЃРЅСѓСЋ РєР»РµС‚РєСѓ РґР»СЏ РїРѕРґСЃРєР°Р·РєРё";
+                hintMessage.style.display = 'block';
+                setTimeout(() => {
+                    hintMessage.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        // РћР±СЂР°Р±РѕС‚С‡РёРєРё СЃРѕР±С‹С‚РёР№
+        // Р’С‹Р±РѕСЂ СѓСЂРѕРІРЅСЏ СЃР»РѕР¶РЅРѕСЃС‚Рё
+        difficultyButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // РЈР±РёСЂР°РµРј Р°РєС‚РёРІРЅС‹Р№ РєР»Р°СЃСЃ Сѓ РІСЃРµС… РєРЅРѕРїРѕРє
+                difficultyButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Р”РѕР±Р°РІР»СЏРµРј Р°РєС‚РёРІРЅС‹Р№ РєР»Р°СЃСЃ РІС‹Р±СЂР°РЅРЅРѕР№ РєРЅРѕРїРєРµ
+                button.classList.add('active');
+                
+                // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј СѓСЂРѕРІРµРЅСЊ СЃР»РѕР¶РЅРѕСЃС‚Рё
+                gameState.difficulty = button.dataset.difficulty;
+                
+                // РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј РёРіСЂСѓ СЃ РЅРѕРІС‹Рј СѓСЂРѕРІРЅРµРј СЃР»РѕР¶РЅРѕСЃС‚Рё
+                initGame();
+            });
+        });
+
+        // РќРѕРІР°СЏ РёРіСЂР°
+        newGameButton.addEventListener('click', () => {
+            initGame();
+        });
+
+        // РџРѕРґСЃРєР°Р·РєР°
+        hintButton.addEventListener('click', () => {
+            giveHint();
+        });
+
+        // РР·РјРµРЅРµРЅРёРµ СЂРµР¶РёРјР° (С„Р»Р°Р¶РѕРє/РѕС‚РєСЂС‹С‚РёРµ)
+        changeModeButton.addEventListener('click', () => {
+            gameState.flagMode = !gameState.flagMode;
+            
+            if (gameState.flagMode) {
+                changeModeButton.innerHTML = '<i class="fas fa-mouse-pointer"></i> Р РµР¶РёРј: РћС‚РєСЂС‹С‚РёРµ';
+                changeModeButton.style.background = 'linear-gradient(145deg, #4CAF50, #2E7D32)';
+            } else {
+                changeModeButton.innerHTML = '<i class="fas fa-flag"></i> Р РµР¶РёРј: Р¤Р»Р°Р¶РѕРє';
+                changeModeButton.style.background = 'linear-gradient(145deg, #1a1a4a, #0f0f2a)';
+            }
+        });
+
+        // Р—Р°РєСЂС‹С‚РёРµ СЃРѕРѕР±С‰РµРЅРёСЏ Рѕ СЂРµР·СѓР»СЊС‚Р°С‚Рµ РёРіСЂС‹
+        closeMessageButton.addEventListener('click', () => {
+            gameMessage.style.display = 'none';
+            initGame();
+        });
+
+        // РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РёРіСЂС‹ РїСЂРё Р·Р°РіСЂСѓР·РєРµ
+        document.addEventListener('DOMContentLoaded', () => {
+            initGame();
+            
+            // Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ СЃС‚Р°С‚РёСЃС‚РёРєРё РёР· localStorage
+            const savedStreak = localStorage.getItem('minesweeper_win_streak');
+            const savedGames = localStorage.getItem('minesweeper_games_played');
+            
+            if (savedStreak) {
+                gameState.winStreak = parseInt(savedStreak);
+                winStreakElement.textContent = gameState.winStreak;
+            }
+            
+            if (savedGames) {
+                gameState.gamesPlayed = parseInt(savedGames);
+            }
+        });
+
+        // РЎРѕС…СЂР°РЅРµРЅРёРµ СЃС‚Р°С‚РёСЃС‚РёРєРё РїСЂРё Р·Р°РєСЂС‹С‚РёРё СЃС‚СЂР°РЅРёС†С‹
+        window.addEventListener('beforeunload', () => {
+            localStorage.setItem('minesweeper_win_streak', gameState.winStreak);
+            localStorage.setItem('minesweeper_games_played', gameState.gamesPlayed);
+        });
+    </script>
+</body>
+</html>
